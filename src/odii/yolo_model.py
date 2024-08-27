@@ -154,10 +154,13 @@ class LOAD_MODEL:
         model = exp.get_model()
         ckpt_file = self.model_path["weights"]
         ckpt = torch.load(ckpt_file, map_location=self.device)
-        model.load_state_dict(ckpt["model"])
-        model.to(self.device)
         if num_classes:
-            model.head.num_classes = num_classes
+            model.load_state_dict(ckpt["model"])
+        else:
+            model.load_state_dict(ckpt["model"], strict=False)
+        model.to(self.device)
+        # if num_classes:
+        #     model.head.num_classes = num_classes
         print(f"{self.model_name} model loaded!")
         return model
 
