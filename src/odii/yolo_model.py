@@ -529,7 +529,7 @@ class INFERENCE:
         return result
 
     def infer_image(
-        self, image_path, confidence_threshold=0.5, nms_threshold=0.45
+        self, image_path, confidence_threshold=0.5, nms_threshold=0.45, num_classes=80
     ) -> dict:
         """
         Infers the specified model on an image.
@@ -547,7 +547,7 @@ class INFERENCE:
 
         if self.model_name in yolox_models:
             output = self.infer_yolox(
-                image, conf_threshold=confidence_threshold, nms_threshold=nms_threshold
+                image, conf_threshold=confidence_threshold, nms_threshold=nms_threshold, num_classes=num_classes
             )
         elif self.model_name == "yolov3":
             output = self.infer_yolov3(
