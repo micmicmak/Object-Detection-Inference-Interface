@@ -132,9 +132,9 @@ class LOAD_MODEL:
         self.model_path = model_path
         self.model_name = model_name
 
-    def load_model(self):
+    def load_model(self, num_classes = None):
         if self.model_name in yolox_models:
-            return self.load_yolox().eval()
+            return self.load_yolox(num_classes).eval()
         elif self.model_name == "yolov3":
             return self.load_yolov3().eval()
         elif self.model_name == "yolov7":
@@ -146,7 +146,7 @@ class LOAD_MODEL:
         else:
             raise ValueError(f"Unsupported model name: {self.model_name}")
 
-    def load_yolox(self):
+    def load_yolox(self, num_classes = None):
         add_to_sys_path(f"{src_path}/yolox")
         from yolox.exp import get_exp
 
@@ -156,6 +156,8 @@ class LOAD_MODEL:
         ckpt = torch.load(ckpt_file, map_location=self.device)
         model.load_state_dict(ckpt["model"])
         model.to(self.device)
+        if num_classes:
+            model.head.num_classes = num_classes
         print(f"{self.model_name} model loaded!")
         return model
 
@@ -261,7 +263,7 @@ class INFERENCE:
             dict: The result of the object detection, including the bounding boxes, class IDs, and scores.
         """
         if not self.model_loaded:
-            self.model = self.model_loader.load_model()
+            self.model = self.model_loader.load_model(num_classes)
             self.model_loaded = True
 
         from yolox.data.data_augment import ValTransform
