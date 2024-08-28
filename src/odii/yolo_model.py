@@ -134,6 +134,7 @@ class LOAD_MODEL:
 
     def load_model(self, num_classes = None):
         if self.model_name in yolox_models:
+            print(f'num_classes: {num_classes}')
             return self.load_yolox(num_classes).eval()
         elif self.model_name == "yolov3":
             return self.load_yolov3().eval()
@@ -150,6 +151,7 @@ class LOAD_MODEL:
         add_to_sys_path(f"{src_path}/yolox")
         from yolox.exp import get_exp
 
+        print(f'num_classes: {num_classes}')
         exp = get_exp(yolox_exp_paths[self.model_name], num_classes)
         model = exp.get_model()
         ckpt_file = self.model_path["weights"]
