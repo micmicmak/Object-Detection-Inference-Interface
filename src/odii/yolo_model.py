@@ -150,7 +150,7 @@ class LOAD_MODEL:
         add_to_sys_path(f"{src_path}/yolox")
         from yolox.exp import get_exp
 
-        exp = get_exp(yolox_exp_paths[self.model_name], num_classes)
+        exp = get_exp(yolox_exp_paths[self.model_name], num_classes=num_classes)
         model = exp.get_model()
         ckpt_file = self.model_path["weights"]
         ckpt = torch.load(ckpt_file, map_location=self.device)
